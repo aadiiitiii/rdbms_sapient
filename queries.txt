@@ -24,9 +24,9 @@ create table if not exists category(
 create table if not exists author(
 	author_id int unsigned primary key auto_increment,
 	author_name varchar(40),
-	post_id int unsigned,
+	post_id int unsigned
 	
-	constraint post_id_fk foreign key(post_id) references posts(post_id)
+	#constraint post_id_fk foreign key(post_id) references posts(post_id)
 );
 
 create table if not exists posts(
@@ -71,11 +71,11 @@ insert into author(author_name) values("Joshi");
 select * from author;
 
 insert into blog(name,blog_url,created_date) values("Aditi's blog", "www.aditi.com", "2010-06-05");
-insert into blog(name,blog_url,created_date) values("Joshis's blog", "www.joshi.com", "2010-06-09");
+insert into blog(name,blog_url,created_date) values("Joshi's blog", "www.joshi.com", "2010-06-09");
 select * from blog;
 
-insert into category(cat_name,blog_id,parent_cat_id) values("TP","1","1");
-insert into category(cat_name,blog_id,parent_cat_id) values("Try","2","2");
+insert into category(cat_name,blog_id) values("TP","1");
+insert into category(cat_name,blog_id) values("Try","2");
 select * from category;
 
 insert into posts(title,author_id,content,cat_id) values("Hello","1","This is aditi's blog","1");
@@ -92,3 +92,12 @@ select * from posts_tag;
 
 update comments set comment_text="I agree" where author_id="2" && post_id="2";
 select * from comments;
+
+#----------------Joins-----------------
+select * from blog inner join category on blog.id= category.blog_id;
+
+select * from blog left join category on blog.id= category.blog_id;
+
+select * from blog right join category on blog.id= category.blog_id;
+
+SELECT * FROM blog WHERE id=1 GROUP BY id ORDER BY id;
