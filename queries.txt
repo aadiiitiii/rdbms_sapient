@@ -1,0 +1,94 @@
+drop database blog_db;
+
+create database if not exists blog_db;
+
+use blog_db;
+
+create table if not exists blog(
+	id int unsigned primary key auto_increment, 
+	name varchar(50),
+	blog_url varchar(100), 
+	created_date date
+);
+
+create table if not exists category(
+	cat_id int unsigned primary key auto_increment,
+	cat_name varchar(40),
+	blog_id int unsigned,
+	#parent_cat_id int unsigned,
+
+	constraint blog_id_fk foreign key(blog_id) references blog(id)
+	#constraint cat_id_fk foreign key(parent_cat_id) references category(cat_id)
+);
+
+create table if not exists author(
+	author_id int unsigned primary key auto_increment,
+	author_name varchar(40),
+	post_id int unsigned,
+	
+	constraint post_id_fk foreign key(post_id) references posts(post_id)
+);
+
+create table if not exists posts(
+	post_id int unsigned primary key auto_increment,
+	title varchar(40),
+	author_id int unsigned,
+	content varchar(100),
+	cat_id int unsigned,
+	constraint author_id_fk foreign key(author_id) references author(author_id)
+);
+
+create table if not exists comments(
+	com_id int unsigned primary key auto_increment,
+	author_id int unsigned,
+	post_id int unsigned,
+	comment_text varchar(100),
+
+	constraint comments_id_fk foreign key(post_id) references posts(post_id)
+);
+
+create table if not exists posts_tag(
+	tag_id int unsigned primary key auto_increment,
+	post_id int unsigned,
+	tag_name varchar(40)
+);
+
+show create table blog;
+show create table category;
+show create table author;
+show create table posts;
+show create table comments;
+show create table posts_tag;
+
+alter table posts add post_date date;
+alter table posts drop column post_date;
+show create table posts;
+
+#----------------DML-----------------
+
+insert into author(author_name) values("Aditi");
+insert into author(author_name) values("Joshi");
+select * from author;
+
+insert into blog(name,blog_url,created_date) values("Aditi's blog", "www.aditi.com", "2010-06-05");
+insert into blog(name,blog_url,created_date) values("Joshis's blog", "www.joshi.com", "2010-06-09");
+select * from blog;
+
+insert into category(cat_name,blog_id,parent_cat_id) values("TP","1","1");
+insert into category(cat_name,blog_id,parent_cat_id) values("Try","2","2");
+select * from category;
+
+insert into posts(title,author_id,content,cat_id) values("Hello","1","This is aditi's blog","1");
+insert into posts(title,author_id,content,cat_id) values("Hiii","2","This is joshi's blog","2");
+select * from posts;
+
+insert into comments(author_id,post_id,comment_text) values("1","1","Good one");
+insert into comments(author_id,post_id,comment_text) values("2","2","Nice one");
+select * from comments;
+
+insert into posts_tag(post_id,tag_name) values("1","Office");
+insert into posts_tag(post_id,tag_name) values("2","Work");
+select * from posts_tag;
+
+update comments set comment_text="I agree" where author_id="2" && post_id="2";
+select * from comments;
